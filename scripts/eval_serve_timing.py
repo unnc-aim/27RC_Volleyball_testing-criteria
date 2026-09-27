@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""T19 发球时机与自动击球闭环：成功率 / 时序误差 / 误触发判档。
+"""T04 发球时机与自动击球闭环：成功率 / 时序误差 / 误触发判档。
 
 输入 CSV（首行表头，每次击球试验一行）：
     speed_group,success,timing_err_ms
@@ -9,7 +9,7 @@
 误触发率经 --false-triggers N --scenes N 提供（非时机挥拍数 / 场景总数）。
 
 用法:
-    python scripts/eval_serve_timing.py t19.csv \
+    python scripts/eval_serve_timing.py t04.csv \
         [--false-triggers 2 --scenes 60] [--json out.json]
 """
 
@@ -24,7 +24,7 @@ FALSE_TRIG_BANDS_PCT = (1.0, 3.0, 5.0)
 
 
 def main():
-    ap = argparse.ArgumentParser(description="T19 发球闭环判档")
+    ap = argparse.ArgumentParser(description="T04 发球闭环判档")
     ap.add_argument("csv", help="输入 CSV：speed_group,success,timing_err_ms")
     ap.add_argument("--false-triggers", type=int, default=None,
                     help="非时机挥拍次数")
@@ -47,7 +47,7 @@ def main():
         if err not in (None, ""):
             timing_errs.append(float(err))
 
-    rep = Report("T19 发球时机与自动击球闭环判档")
+    rep = Report("T04 发球时机与自动击球闭环判档")
     rate = n_hit / n_all * 100 if n_all else 0.0
     rep.add("击球成功率(整体)", rate, SUCCESS_BANDS_PCT, upper=False,
             fmt="{:.2f}%")

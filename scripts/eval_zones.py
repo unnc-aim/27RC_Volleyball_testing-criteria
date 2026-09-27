@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""T04 标定板空间覆盖：3x3 分区误差矩阵与判档。
+"""T13 标定板空间覆盖：3x3 分区误差矩阵与判档。
 
 输入 CSV（首行表头）：
     zone,reproj_err,epipolar_err
@@ -7,7 +7,7 @@
     #              6 右中、7 左下、8 下中、9 右下（逐角点/逐点一行）
 
 用法:
-    python scripts/eval_zones.py t04.csv [--json out.json]
+    python scripts/eval_zones.py t13.csv [--json out.json]
 """
 
 import argparse
@@ -32,7 +32,7 @@ def show_matrix(name, per_zone):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="T04 分区覆盖判档")
+    ap = argparse.ArgumentParser(description="T13 分区覆盖判档")
     ap.add_argument("csv", help="输入 CSV：zone,reproj_err,epipolar_err")
     ap.add_argument("--json", dest="json_path", help="结果导出 JSON 路径")
     args = ap.parse_args()
@@ -45,7 +45,7 @@ def main():
         buckets[zone]["reproj"].append(float(row["reproj_err"]))
         buckets[zone]["epi"].append(float(row["epipolar_err"]))
 
-    rep = Report("T04 标定板空间覆盖判档")
+    rep = Report("T13 标定板空间覆盖判档")
     missing = [z for z, v in buckets.items() if not v["reproj"]]
     if missing:
         rep.warn(f"分区 {missing} 无数据，判档仅基于已有分区")

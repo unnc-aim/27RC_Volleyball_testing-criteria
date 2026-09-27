@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""T18 动态球测距：静态/动态测距 RMSE、有效率与抖动判档。
+"""T03 动态球测距：静态/动态测距 RMSE、有效率与抖动判档。
 
 输入 CSV（首行表头，逐帧一行；静态与动态数据同格式，按 gt 距离分组）：
     dist_gt,dist_meas[,valid]     # 单位 m；valid 取 1/0，缺省为 1
 
 用法:
-    python scripts/eval_ball_ranging.py t18.csv --f 2200 --b 1.0 \
+    python scripts/eval_ball_ranging.py t03.csv --f 2200 --b 1.0 \
         [--json out.json]
 """
 
@@ -20,7 +20,7 @@ JITTER_RATIO_BANDS = (1.2, 1.5, 2.0)
 
 
 def main():
-    ap = argparse.ArgumentParser(description="T18 动态球测距判档")
+    ap = argparse.ArgumentParser(description="T03 动态球测距判档")
     ap.add_argument("csv", help="输入 CSV：dist_gt,dist_meas[,valid]")
     ap.add_argument("--f", type=float, required=True, help="焦距 f（px）")
     ap.add_argument("--b", type=float, required=True, help="基线 B（m）")
@@ -40,7 +40,7 @@ def main():
         if ok:
             groups[round(gt, 3)].append((gt, float(row["dist_meas"])))
 
-    rep = Report("T18 动态球测距判档")
+    rep = Report("T03 动态球测距判档")
     worst_ratio = 0.0
     for gt in sorted(groups):
         samples = groups[gt]

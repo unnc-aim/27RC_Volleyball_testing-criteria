@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""T05 不同距离深度误差 + T06 深度精度：统计与判档。
+"""T14 不同距离深度误差 + T15 深度精度：统计与判档。
 
 输入 CSV（首行表头）：
     z_gt,z_stereo        # 单位 m；同一 z_gt 的样本自动归为一组距离
 
 判档口径（与细则一致）：
-    T05：每距离 Er(RMS) <= 分档系数 x delta_Z_th(Z)，任一距离不合格即 0 分
+    T14：每距离 Er(RMS) <= 分档系数 x delta_Z_th(Z)，任一距离不合格即 0 分
          （木桶原则已覆盖）；另输出 log-log 拟合斜率 k（应接近 2）。
-    T06：跨距离归一化误差 eps = Er / delta_Z_th(Z) 的 RMSE / Max / 3 sigma。
+    T15：跨距离归一化误差 eps = Er / delta_Z_th(Z) 的 RMSE / Max / 3 sigma。
 
 用法:
-    python scripts/eval_depth.py t05.csv --f 2200 --b 1.0 [--json out.json]
+    python scripts/eval_depth.py t14.csv --f 2200 --b 1.0 [--json out.json]
 """
 
 import argparse
@@ -28,7 +28,7 @@ T06_3SIGMA_BANDS = (2.5, 4.0, 6.0)
 
 def parse_args():
     ap = argparse.ArgumentParser(
-        description="T05/T06 深度误差统计与判档（Er 与归一化误差 eps）")
+        description="T14/T15 深度误差统计与判档（Er 与归一化误差 eps）")
     ap.add_argument("csv", help="输入 CSV：z_gt,z_stereo（m）")
     ap.add_argument("--f", type=float, required=True, help="焦距 f（px）")
     ap.add_argument("--b", type=float, required=True, help="基线 B（m）")
@@ -46,7 +46,7 @@ def main():
         z_gt = float(row["z_gt"])
         groups[round(z_gt, 3)].append((z_gt, float(row["z_stereo"])))
 
-    rep = Report("T05/T06 深度误差判档")
+    rep = Report("T14/T15 深度误差判档")
     rep.add_raw("配置", f"f={args.f:g} px，B={args.b:g} m，dd0={args.dd:g} px")
 
     zs, er_rms_by_z, eps_all = [], [], []

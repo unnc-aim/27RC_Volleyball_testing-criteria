@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
-"""T12 机械稳定性 / T13 温度稳定性：标定参数漂移统计与判档。
+"""T06 机械稳定性 / T07 温度稳定性：标定参数漂移统计与判档。
 
 输入 CSV（首行表头，每行一次复测标定）：
     fx,fy,cx,cy,baseline_mm,roll_deg,pitch_deg,yaw_deg[,temp_c][,er_rms]
-    # temp_c：T13 必填（温点，摄氏度）；er_rms：可选，该次复测深度 Er(RMS)
+    # temp_c：T07 必填（温点，摄氏度）；er_rms：可选，该次复测深度 Er(RMS)
 
 模式：
-    t12：首行为初始基准，逐行计算 |dB|/B、dR（任一欧拉角最大）、
+    t06：首行为初始基准，逐行计算 |dB|/B、dR（任一欧拉角最大）、
          Er 恶化系数；任一 |dB|/B 或 dR 超合格档即提示否决项 V3。
-    t13：按温度线性回归，指标以每 10 摄氏度变化量表征（取最大漂移）。
+    t07：按温度线性回归，指标以每 10 摄氏度变化量表征（取最大漂移）。
 
 用法:
-    python scripts/eval_drift.py t12.csv --mode t12 [--json out.json]
-    python scripts/eval_drift.py t13.csv --mode t13 [--json out.json]
+    python scripts/eval_drift.py t06.csv --mode t06 [--json out.json]
+    python scripts/eval_drift.py t07.csv --mode t07 [--json out.json]
 """
 
 import argparse
@@ -42,7 +42,7 @@ def parse_rows(path):
 
 def run_t12(data, json_path):
     base = data[0]
-    rep = Report("T12 机械稳定性判档（基准 = 首行）")
+    rep = Report("T06 机械稳定性判档（基准 = 首行）")
     for i, cur in enumerate(data[1:], start=1):
         db = (abs(cur["baseline_mm"] - base["baseline_mm"])
               / base["baseline_mm"] * 100)
@@ -57,13 +57,13 @@ def run_t12(data, json_path):
         b == "不合格" for m, _, _, b in rep.rows
         if "|dB|" in m or "dR" in m)
     if fail_core:
-        rep.warn("否决项 V3 触发（标定失效）：须重新标定并复测 T01-T10")
+        rep.warn("否决项 V3 触发（标定失效）：须重新标定并复测 T10-T19")
     return rep.emit(json_path)
 
 
 def run_t13(data, json_path):
     temps = [d["temp_c"] for d in data]
-    rep = Report("T13 温度稳定性判档（指标按每 10 摄氏度变化量）")
+    rep = Report("T07 温度稳定性判档（指标按每 10 摄氏度变化量）")
 
     def rate_rel_pct(key):
         base = sum(d[key] for d in data) / len(data)
@@ -90,19 +90,19 @@ def run_t13(data, json_path):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="T12/T13 参数漂移判档")
+    ap = argparse.ArgumentParser(description="T06/T07 参数漂移判档")
     ap.add_argument("csv", help="输入 CSV（表头见模块 docstring）")
-    ap.add_argument("--mode", choices=("t12", "t13"), required=True)
+    ap.add_argument("--mode", choices=("t06", "t07"), required=True)
     ap.add_argument("--json", dest="json_path", help="结果导出 JSON 路径")
     args = ap.parse_args()
 
     data = parse_rows(args.csv)
-    if args.mode == "t12":
+    if args.mode == "t06":
         if len(data) < 2:
-            raise SystemExit("错误：T12 至少需要 2 行（基准 + 工况）")
+            raise SystemExit("错误：T06 至少需要 2 行（基准 + 工况）")
         return run_t12(data, args.json_path)
     if any("temp_c" not in d for d in data):
-        raise SystemExit("错误：--mode t13 需要每行提供 temp_c 列")
+        raise SystemExit("错误：--mode t07 需要每行提供 temp_c 列")
     return run_t13(data, args.json_path)
 
 

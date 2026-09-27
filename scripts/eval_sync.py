@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""T14 时间同步：dt = t_L - t_R 序列统计与判档。
+"""T08 时间同步：dt = t_L - t_R 序列统计与判档。
 
 输入 CSV（首行表头）：
     dt_ms        # 每个同步事件的 dt（ms），建议 >= 100 个事件
 
 用法:
-    python scripts/eval_sync.py t14.csv [--json out.json]
+    python scripts/eval_sync.py t08.csv [--json out.json]
 """
 
 import argparse
@@ -17,14 +17,14 @@ SIGMA_BANDS = (0.05, 0.2, 0.5)
 
 
 def main():
-    ap = argparse.ArgumentParser(description="T14 时间同步判档")
+    ap = argparse.ArgumentParser(description="T08 时间同步判档")
     ap.add_argument("csv", help="输入 CSV：dt_ms")
     ap.add_argument("--json", dest="json_path", help="结果导出 JSON 路径")
     args = ap.parse_args()
 
     dts = [float(r["dt_ms"]) for r in read_csv_rows(args.csv)]
 
-    rep = Report("T14 时间同步判档")
+    rep = Report("T08 时间同步判档")
     rep.add("|Mean(dt)|", abs(mean(dts)), MEAN_BANDS, fmt="{:.4f} ms")
     rep.add("sigma(dt)", sdev(dts), SIGMA_BANDS, fmt="{:.4f} ms")
     rep.add_raw(

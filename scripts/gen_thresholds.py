@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""生成距离类分档阈值表（对应细则附录 A / T05 / T06 换算规则）。
+"""生成距离类分档阈值表（对应细则附录 A / T14 / T15 换算规则）。
 
 阈值(Z) = 分档系数 x Z*dd0/(f*B)，分档系数：优 1.5 / 良 2.5 / 合格 4.0。
 
@@ -18,7 +18,7 @@ MULTS = (1.5, 2.5, 4.0)
 
 def parse_args():
     ap = argparse.ArgumentParser(
-        description="生成 T05/T06 距离类误差分档阈值表（附录 A）")
+        description="生成 T14/T15 距离类误差分档阈值表（附录 A）")
     ap.add_argument("--f", type=float, default=2200.0,
                     help="焦距 f（px，标定值），默认 2200")
     ap.add_argument("--b", type=float, default=1.0,

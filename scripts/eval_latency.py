@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""T17 检测推理速度：全链路延迟 / 帧率 / 长跑衰减判档。
+"""T02 检测推理速度：全链路延迟 / 帧率 / 长跑衰减判档。
 
 输入 CSV（首行表头）：
     latency_ms        # 每帧全链路延迟（预处理 + 推理 + 后处理）
@@ -7,7 +7,7 @@
 可选 --longrun 提供长跑（>= 10 min）段的同列 CSV，计算帧率衰减率。
 
 用法:
-    python scripts/eval_latency.py t17.csv [--longrun t17_long.csv] \
+    python scripts/eval_latency.py t02.csv [--longrun t17_long.csv] \
         [--json out.json]
 """
 
@@ -26,7 +26,7 @@ def load_latency(path):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="T17 检测推理速度判档")
+    ap = argparse.ArgumentParser(description="T02 检测推理速度判档")
     ap.add_argument("csv", help="输入 CSV：latency_ms")
     ap.add_argument("--longrun", help="长跑段 CSV（同列），可选")
     ap.add_argument("--json", dest="json_path", help="结果导出 JSON 路径")
@@ -35,7 +35,7 @@ def main():
     lat = load_latency(args.csv)
     fps = 1000.0 / mean(lat) if lat else 0.0
 
-    rep = Report("T17 检测推理速度判档")
+    rep = Report("T02 检测推理速度判档")
     rep.add("延迟 P50", percentile(lat, 50), P50_BANDS, fmt="{:.2f} ms")
     rep.add("延迟 P95", p95(lat), P95_BANDS, fmt="{:.2f} ms")
     rep.add_raw("延迟 P99 / 均值",

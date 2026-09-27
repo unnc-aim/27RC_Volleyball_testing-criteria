@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""T07 三轴（X/Y/Z）定位精度：统计与判档。
+"""T16 三轴（X/Y/Z）定位精度：统计与判档。
 
 输入 CSV（首行表头）：
     x_gt,y_gt,z_gt,x,y,z        # 单位 m
@@ -7,10 +7,10 @@
 判档口径：
     X/Y 轴：逐样本相对误差 |delta|/Z 的 RMS（优 0.05% / 良 0.10% /
     合格 0.20%），另判系统偏差比 |bias|/RMSE（同一轴）。
-    Z 轴：提供 --f --b 时按 T06 归一化误差 eps 判档；否则仅输出统计值。
+    Z 轴：提供 --f --b 时按 T15 归一化误差 eps 判档；否则仅输出统计值。
 
 用法:
-    python scripts/eval_xyz.py t07.csv [--f 2200 --b 1.0] [--json out.json]
+    python scripts/eval_xyz.py t16.csv [--f 2200 --b 1.0] [--json out.json]
 """
 
 import argparse
@@ -33,7 +33,7 @@ def axis_stats(values):
 
 
 def parse_args():
-    ap = argparse.ArgumentParser(description="T07 三轴定位精度判档")
+    ap = argparse.ArgumentParser(description="T16 三轴定位精度判档")
     ap.add_argument("csv", help="输入 CSV：x_gt,y_gt,z_gt,x,y,z（m）")
     ap.add_argument("--f", type=float, help="焦距 f（px），用于 Z 轴判档")
     ap.add_argument("--b", type=float, help="基线 B（m），用于 Z 轴判档")
@@ -53,7 +53,7 @@ def main():
             err[axis].append(cur[axis.lower()] - gt[axis.lower()])
         z_gts.append(gt["z"])
 
-    rep = Report("T07 三轴定位精度判档")
+    rep = Report("T16 三轴定位精度判档")
     for axis in ("X", "Y"):
         st = axis_stats(err[axis])
         rel_rms = rms([abs(e) / g for e, g in zip(err[axis], z_gts)])

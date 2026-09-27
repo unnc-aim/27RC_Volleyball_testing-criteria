@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""恶化系数 kappa 判档（T10 / T11 / T12 / T13 / T15 通用）。
+"""恶化系数 kappa 判档（T19 / T05 / T06 / T07 / T09 通用）。
 
 kappa = 工况指标 / 基准指标，阈值按测试项选择：
-    t10 / t11 / t15 : 优 1.2 / 良 1.5 / 合格 2.0
-    t12 / t13       : 优 1.1 / 良 1.2 / 合格 1.5
+    t19 / t05 / t09 : 优 1.2 / 良 1.5 / 合格 2.0
+    t06 / t07       : 优 1.1 / 良 1.2 / 合格 1.5
 
 用法:
     python scripts/eval_kappa.py --base 0.55 --values 0.62,0.71 \
-        --bands t10
+        --bands t19
 """
 
 import argparse
@@ -15,11 +15,11 @@ import argparse
 from lbst_common import Report
 
 KAPPA_BANDS = {
-    "t10": (1.2, 1.5, 2.0),
-    "t11": (1.2, 1.5, 2.0),
-    "t15": (1.2, 1.5, 2.0),
-    "t12": (1.1, 1.2, 1.5),
-    "t13": (1.1, 1.2, 1.5),
+    "t19": (1.2, 1.5, 2.0),
+    "t05": (1.2, 1.5, 2.0),
+    "t09": (1.2, 1.5, 2.0),
+    "t06": (1.1, 1.2, 1.5),
+    "t07": (1.1, 1.2, 1.5),
 }
 
 
@@ -28,8 +28,8 @@ def main():
     ap.add_argument("--base", type=float, required=True,
                     help="基准指标值（正对姿态 / 静态 / 初始的误差）")
     ap.add_argument("--values", required=True, help="逗号分隔的工况指标值")
-    ap.add_argument("--bands", choices=sorted(KAPPA_BANDS), default="t10",
-                    help="阈值组（对应测试编号），默认 t10")
+    ap.add_argument("--bands", choices=sorted(KAPPA_BANDS), default="t19",
+                    help="阈值组（对应测试编号），默认 t19")
     ap.add_argument("--json", dest="json_path", help="结果导出 JSON 路径")
     args = ap.parse_args()
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""T16 排球检测模型精度：Recall / Precision / 中心点误差判档。
+"""T01 排球检测模型精度：Recall / Precision / 中心点误差判档。
 
 输入 CSV（首行表头，每行一个检出或漏检事件）：
     segment,outcome,cx_err_px
@@ -8,7 +8,7 @@
     #  远段命名含“远”（或 far），如 近/中/远
 
 用法:
-    python scripts/eval_detection.py t16.csv [--json out.json]
+    python scripts/eval_detection.py t01.csv [--json out.json]
 """
 
 import argparse
@@ -23,7 +23,7 @@ CX_BANDS_PX = (2.0, 4.0, 8.0)
 
 
 def main():
-    ap = argparse.ArgumentParser(description="T16 检测模型精度判档")
+    ap = argparse.ArgumentParser(description="T01 检测模型精度判档")
     ap.add_argument("csv", help="输入 CSV：segment,outcome,cx_err_px")
     ap.add_argument("--json", dest="json_path", help="结果导出 JSON 路径")
     args = ap.parse_args()
@@ -50,7 +50,7 @@ def main():
     recall, precision = rates(list(counts))
     far_keys = [k for k in counts if "远" in k or "far" in k.lower()]
 
-    rep = Report("T16 排球检测模型精度判档")
+    rep = Report("T01 排球检测模型精度判档")
     rep.add("整体 Recall", recall, RECALL_BANDS_PCT, upper=False,
             fmt="{:.2f}%")
     if far_keys:
